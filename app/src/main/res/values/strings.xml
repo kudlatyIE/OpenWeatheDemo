@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">OpenWeatherDemo</string>
+    <string name="menu_refresh">refresh</string>
+    <string name="title_login">OpenWeather Demo</string>
 </resources>

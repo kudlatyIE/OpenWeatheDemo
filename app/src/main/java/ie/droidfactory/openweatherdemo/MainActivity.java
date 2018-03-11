@@ -10,9 +10,13 @@ import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -24,6 +28,7 @@ import java.util.ArrayList;
 import ie.droidfactory.openweatherdemo.api.NetworkUtils;
 import ie.droidfactory.openweatherdemo.model.IconResponse;
 import ie.droidfactory.openweatherdemo.model.WeatherCondition;
+import ie.droidfactory.openweatherdemo.utils.ConnectionUtils;
 import ie.droidfactory.openweatherdemo.utils.DataFormatUtils;
 import ie.droidfactory.openweatherdemo.utils.LocationUtils;
 import ie.droidfactory.openweatherdemo.utils.MyLocale;
@@ -39,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private TextView tvDate, tvLocation, tvDescription, tvSunset, tvSunrise, tvTempMini, tvTempMax, tvWind, tvPressure, tvTempNow, tvHumidity;
     private ImageView imgWeather;
-    private Button btnRefresh;
     private ScrollView weatherLauout;
     private View viewMain;
     private ArrayList<String> permissions=new ArrayList<>();
@@ -51,17 +55,22 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btnRefresh = findViewById(R.id.button_main_refresh);
         weatherLauout = findViewById(R.id.layout_main_weather);
-        btnRefresh.setVisibility(View.GONE);
-
         viewMain = findViewById(R.id.main_lauout);
 
-        //TODO: get weather ICON and set in layout
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(getResources().getString(R.string.title_login));
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setIcon(R.mipmap.ic_launcher_round);
 
         loadViews();
-        chechPermissions();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        chechPermissions();
 
     }
 
@@ -69,20 +78,21 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         String sLat, sLon;
         sLat = String.valueOf(lat);
         sLon = String.valueOf(lon);
-//        sLat = "53.3";
-//        sLon = "-6.26";
+
         final double resizeFactor = 4.0;
 
-        if (isInternetOn(this)){
+        if (ConnectionUtils.isInternetOn(this)){
             WeatherTodayViewModel weatherTodayViewModel = ViewModelProviders.of(this).get(WeatherTodayViewModel.class);
-            weatherTodayViewModel.loadWeatherToday(NetworkUtils.API_KEY, sLat, sLon, metric).observe(this, new Observer<WeatherCondition>() {
+            weatherTodayViewModel.loadWeatherToday(getResources().getString(R.string.weather_app_key), sLat, sLon, metric).observe(this, new Observer<WeatherCondition>() {
                 @Override
                 public void onChanged(@Nullable WeatherCondition weatherCondition) {
-                    Log.d(TAG, "onChange");
+
                     if(weatherCondition.getErrorResponse()!=null){
-                        Log.d(TAG,"err code: "+weatherCondition.getErrorResponse().getResponseCode()+" "+weatherCondition.getErrorResponse().getErrorMessage());
+                        weatherLauout.setVisibility(View.INVISIBLE);
+                        showSnackbar("Error: "+weatherCondition.getErrorResponse().getResponseCode()+" "+weatherCondition.getErrorResponse().getErrorMessage());
 
                     }else {
+                        weatherLauout.setVisibility(View.VISIBLE);
                         Log.d(TAG, "weather dec: "+weatherCondition.getWeather().getDescription()+" temp: "+weatherCondition.getMain().getTemp());
                         Log.d(TAG, "weather location: "+weatherCondition.getName());
                         setWeatherData(weatherCondition, MyLocaleUtils.getLocaleUnits(getResources().getConfiguration().locale));
@@ -93,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             });
             Log.d(TAG, "loadWeather end");
         }else {
+            weatherLauout.setVisibility(View.INVISIBLE);
             showSnackbar("turn ON internet connection");
             Log.d(TAG, "turn ON internet connection");
         }
@@ -127,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 snackbar.dismiss();
             }
         });
+        snackbar.show();
     }
 
 
@@ -137,14 +149,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         permissionUtils.check_permission(permissions,"dialog context", PERMISSIONS_REQUEST );
     }
 
-    private boolean isInternetOn(Context context){
-        ConnectivityManager cm =
-                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-    }
 
     @Override
     public void PermissionGranted(int request_code) {
@@ -192,7 +197,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     private void loadViews(){
-//        weatherLauout.setVisibility(View.VISIBLE);
         tvDate=findViewById(R.id.text_main_weather_date);
         imgWeather=findViewById(R.id.imageView_main_weather_icon);
         tvDescription=findViewById(R.id.text_main_weather_description);
@@ -207,4 +211,25 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         tvWind=findViewById(R.id.text_main_weather_wind_speed_value);
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+
+                break;
+            case R.id.menu_item_refresh:
+                chechPermissions();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

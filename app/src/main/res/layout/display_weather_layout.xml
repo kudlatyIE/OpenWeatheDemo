@@ -58,22 +58,22 @@
         style="@style/WeatherTitle"
         android:layout_marginEnd="@dimen/devices_detail_mini_padding"
         android:layout_marginStart="@dimen/devices_detail_mini_padding"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/devices_detail_max_padding"
         android:text="15 C"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_main_weather_sunrise_value" />
+        app:layout_constraintTop_toBottomOf="@+id/divider01" />
 
     <TextView
         android:id="@+id/text_main_weather_temperature_min_label"
         style="@style/WeatherLabel"
         android:layout_marginEnd="@dimen/devices_detail_mini_padding"
         android:layout_marginStart="@dimen/devices_detail_mini_padding"
-        android:layout_marginTop="@dimen/devices_detail_mini_padding"
         android:text="min"
         app:layout_constraintEnd_toStartOf="@+id/vertical_middle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_main_weather_temperature_current_value" />
+        app:layout_constraintTop_toTopOf="@+id/text_main_weather_temperature_current_value" />
 
     <TextView
             android:id="@+id/text_main_weather_temperature_max_label"
@@ -110,15 +110,15 @@
             app:layout_constraintTop_toBottomOf="@+id/text_main_weather_temperature_max_label" />
 
     <TextView
-            android:id="@+id/text_main_weather_humidity_label"
-            style="@style/WeatherLabel"
-            android:layout_marginEnd="@dimen/devices_detail_mini_padding"
-            android:layout_marginStart="@dimen/devices_detail_mini_padding"
-            android:layout_marginTop="@dimen/devices_detail_max_padding"
-            android:text="humidity"
-            app:layout_constraintEnd_toStartOf="@+id/vertical_middle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_main_weather_temperature_min_value" />
+        android:id="@+id/text_main_weather_humidity_label"
+        style="@style/WeatherLabel"
+        android:layout_marginEnd="@dimen/devices_detail_mini_padding"
+        android:layout_marginStart="@dimen/devices_detail_mini_padding"
+        android:layout_marginTop="@dimen/devices_detail_mid_padding"
+        android:text="humidity"
+        app:layout_constraintEnd_toStartOf="@+id/vertical_middle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
     <TextView
             android:id="@+id/text_main_weather_humidity_value"
@@ -179,11 +179,11 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/devices_detail_mini_padding"
         android:layout_marginStart="@dimen/devices_detail_mini_padding"
-        android:layout_marginTop="@dimen/devices_detail_mid_padding"
+        android:layout_marginTop="8dp"
         android:text="sunrise"
         app:layout_constraintEnd_toStartOf="@+id/vertical_middle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_main_weather_description" />
+        app:layout_constraintTop_toTopOf="@+id/divider3" />
 
     <TextView
         android:id="@+id/text_main_weather_sunset_label"
@@ -234,6 +234,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/vertical_middle"
         app:layout_constraintTop_toBottomOf="@+id/text_main_weather_location_name" />
+
+    <ImageView
+        android:id="@+id/divider01"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/devices_detail_mid_padding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_main_weather_sunrise_value"
+        app:srcCompat="@color/colorPrimaryDark" />
+
+    <ImageView
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/devices_detail_mid_padding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_main_weather_temperature_min_value"
+        app:srcCompat="@color/colorPrimaryDark" />
+
+    <ImageView
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/devices_detail_mid_padding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_main_weather_icon"
+        app:srcCompat="@color/colorPrimaryDark" />
 
 </android.support.constraint.ConstraintLayout>
 

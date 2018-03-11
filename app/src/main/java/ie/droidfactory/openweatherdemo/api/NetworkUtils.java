@@ -9,7 +9,6 @@ public class NetworkUtils {
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
 
-    public static final String API_KEY = "151f55c7d82573ce3f4f728b2772692a";
     public static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
     public static final String ICON_URL = "http://openweathermap.org/";
     static final String URL_TODAY = "weather";

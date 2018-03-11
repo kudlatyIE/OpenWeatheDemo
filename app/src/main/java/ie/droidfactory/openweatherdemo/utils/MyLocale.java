@@ -10,7 +10,7 @@ public enum MyLocale {
     IMPERIAL("imperial", "F", "miles/hour"), //Fahrenheit, miles/hour
     DEFAULT("default", "K", "meter/sec"); //Kelvin
 
-    String metricSystem, tempUnits, speedUnits;
+    private String metricSystem, tempUnits, speedUnits;
 
     MyLocale(String metricSystem, String tempUnits, String speedUnits){
         this.metricSystem=metricSystem;
