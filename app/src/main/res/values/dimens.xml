@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="devices_detail_max_padding">32dp</dimen>
+    <dimen name="devices_detail_mid_padding">16dp</dimen>
+    <dimen name="devices_detail_mini_padding">8dp</dimen>
+    <dimen name="devices_detail_top_padding">16dp</dimen>
+
+</resources>
