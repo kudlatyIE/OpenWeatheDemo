@@ -23,7 +23,10 @@ public class WeatherTodayViewModel extends ViewModel {
 
     private MutableLiveData<WeatherCondition> mutableLiveData;
 
-    public LiveData<WeatherCondition> loadWeatherToday(String apiId, String  lat, String lon, String metrc){
+    public LiveData<WeatherCondition> loadWeatherToday(String apiId, String  lat, String lon, String metrc, boolean reload){
+        if(reload){
+            reset();
+        }
         if(mutableLiveData==null){
             mutableLiveData = new MutableLiveData<>();
             getWeatherToday(apiId, lat, lon, metrc);
@@ -31,6 +34,9 @@ public class WeatherTodayViewModel extends ViewModel {
         return mutableLiveData;
     }
 
+    public void reset(){
+        mutableLiveData=null;
+    }
 
     private void getWeatherToday(String apiId, String lat, String lon, String metrc){
 

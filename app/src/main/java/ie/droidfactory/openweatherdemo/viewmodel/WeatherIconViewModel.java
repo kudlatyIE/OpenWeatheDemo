@@ -28,12 +28,16 @@ public class WeatherIconViewModel extends ViewModel{
 
     private MutableLiveData<IconResponse> mutableLiveData;
 
-    public LiveData<IconResponse> loadWeatherIcon(String iconName, double resizeFactor){
+    public LiveData<IconResponse> loadWeatherIcon(String iconName, double resizeFactor, boolean reload){
+        if(reload) reset();
         if(mutableLiveData==null){
             mutableLiveData = new MutableLiveData<>();
             getWeatherIcon(iconName, resizeFactor);
         }
         return mutableLiveData;
+    }
+    public void reset(){
+        mutableLiveData=null;
     }
 
     private void getWeatherIcon(final String iconName, final double resizeFactor){

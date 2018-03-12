@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private ArrayList<String> permissions=new ArrayList<>();
     private PermissionUtils permissionUtils;
     public  static final int PERMISSIONS_REQUEST = 123;
+    private boolean reloadData=false;
 
 
     @Override
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     }
 
-    private void loadWeather(double lat, double lon, String metric){
+    private void loadWeather(double lat, double lon, String metric, final boolean reload){
         String sLat, sLon;
         sLat = String.valueOf(lat);
         sLon = String.valueOf(lon);
@@ -83,7 +84,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         if (ConnectionUtils.isInternetOn(this)){
             WeatherTodayViewModel weatherTodayViewModel = ViewModelProviders.of(this).get(WeatherTodayViewModel.class);
-            weatherTodayViewModel.loadWeatherToday(getResources().getString(R.string.weather_app_key), sLat, sLon, metric).observe(this, new Observer<WeatherCondition>() {
+
+            weatherTodayViewModel.loadWeatherToday(getResources().getString(R.string.weather_app_key), sLat, sLon, metric, reload).observe(this, new Observer<WeatherCondition>() {
                 @Override
                 public void onChanged(@Nullable WeatherCondition weatherCondition) {
 
@@ -96,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                         Log.d(TAG, "weather dec: "+weatherCondition.getWeather().getDescription()+" temp: "+weatherCondition.getMain().getTemp());
                         Log.d(TAG, "weather location: "+weatherCondition.getName());
                         setWeatherData(weatherCondition, MyLocaleUtils.getLocaleUnits(getResources().getConfiguration().locale));
-                        loadWeatherIcon(weatherCondition.getWeather().getWeatherIcon()+".png", resizeFactor);
+                        loadWeatherIcon(weatherCondition.getWeather().getWeatherIcon()+".png", resizeFactor, reload);
                     }
 
                 }
@@ -109,10 +111,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         }
     }
 
-    private void loadWeatherIcon(String iconName, double resizeFactor){
+    private void loadWeatherIcon(String iconName, double resizeFactor, boolean reload){
         Log.d(TAG, "load icon running...");
         WeatherIconViewModel viewModel = ViewModelProviders.of(this).get(WeatherIconViewModel.class);
-        viewModel.loadWeatherIcon(iconName, resizeFactor).observe(this, new Observer<IconResponse>() {
+        viewModel.loadWeatherIcon(iconName, resizeFactor, reload).observe(this, new Observer<IconResponse>() {
             @Override
             public void onChanged(@Nullable IconResponse iconResponse) {
 
@@ -156,7 +158,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         Location location = LocationUtils.getLatLng(this);
         if(location!=null){
             weatherLauout.setVisibility(View.VISIBLE);
-            loadWeather(location.getLatitude(), location.getLongitude(), MyLocaleUtils.getLocaleUnits(getResources().getConfiguration().locale).getMetricSystem());
+            loadWeather(location.getLatitude(), location.getLongitude(), MyLocaleUtils.getLocaleUnits(getResources().getConfiguration().locale).getMetricSystem(), reloadData);
+            reloadData=false;
         }else {
             weatherLauout.setVisibility(View.GONE);
             showSnackbar("current location not available");
@@ -225,6 +228,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
                 break;
             case R.id.menu_item_refresh:
+                reloadData=true;
                 chechPermissions();
                 break;
         }
