@@ -45,7 +45,7 @@ public class PermissionUtils {
      * @param request_code int
      */
 
-    public void check_permission(ArrayList<String> permissions, String dialog_content, int request_code)
+    public void checkPermissionDialog(ArrayList<String> permissions, String dialog_content, int request_code)
     {
         this.permission_list=permissions;
         this.dialog_content=dialog_content;
@@ -64,7 +64,24 @@ public class PermissionUtils {
             Log.i(TAG, "all permissions granted");
             Log.i(TAG, "proceed to callback");
         }
+    }
+    public void checkPermission(ArrayList<String> permissions, int request_code)
+    {
+        this.permission_list=permissions;
+        this.req_code=request_code;
 
+        if(Build.VERSION.SDK_INT >= 23) {
+            if (checkAndRequestPermissions(permissions, request_code)) {
+                permissionResultCallback.PermissionGranted(request_code);
+                Log.i(TAG, "all permissions granted");
+                Log.i(TAG, "proceed to callback");
+            }
+        }
+        else {
+            permissionResultCallback.PermissionGranted(request_code);
+            Log.i(TAG, "all permissions granted");
+            Log.i(TAG, "proceed to callback");
+        }
     }
 
 
@@ -98,85 +115,85 @@ public class PermissionUtils {
         return true;
     }
 
-    /**
-     *
-     *
-     * @param requestCode int
-     * @param permissions String array
-     * @param grantResults int array
-     */
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)
-    {
-        switch (requestCode)
-        {
-            case 123:
-                if(grantResults.length>0) {
-                    Map<String, Integer> perms = new HashMap<>();
-                    for (int i = 0; i < permissions.length; i++) {
-                        perms.put(permissions[i], grantResults[i]);
-                    }
-                    final ArrayList<String> pending_permissions=new ArrayList<>();
+//    /**
+//     *
+//     *
+//     * @param requestCode int
+//     * @param permissions String array
+//     * @param grantResults int array
+//     */
+//    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)
+//    {
+//        switch (requestCode)
+//        {
+//            case 123:
+//                if(grantResults.length>0) {
+//                    Map<String, Integer> perms = new HashMap<>();
+//                    for (int i = 0; i < permissions.length; i++) {
+//                        perms.put(permissions[i], grantResults[i]);
+//                    }
+//                    final ArrayList<String> pending_permissions=new ArrayList<>();
+//
+//                    for (int i = 0; i < listPermissionsNeeded.size(); i++) {
+//                        if (perms.get(listPermissionsNeeded.get(i)) != PackageManager.PERMISSION_GRANTED) {
+//                            if(ActivityCompat.shouldShowRequestPermissionRationale(current_activity,listPermissionsNeeded.get(i)))
+//                                pending_permissions.add(listPermissionsNeeded.get(i));
+//                            else {
+//                                Log.i(TAG, "Go to settings and enable permissions");
+//                                permissionResultCallback.NeverAskAgain(req_code);
+//                                Toast.makeText(current_activity, "Go to settings and enable permissions", Toast.LENGTH_LONG).show();
+//                                return;
+//                            }
+//                        }
+//                    }
+//
+//                    if(pending_permissions.size()>0) {
+//                        showMessageOKCancel(dialog_content,
+//                                new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//
+//                                        switch (which) {
+//                                            case DialogInterface.BUTTON_POSITIVE:
+//                                                checkPermissionDialog(permission_list,dialog_content,req_code);
+//                                                break;
+//                                            case DialogInterface.BUTTON_NEGATIVE:
+//                                                Log.i(TAG, "permission not fully given");
+//                                                if(permission_list.size()==pending_permissions.size())
+//                                                    permissionResultCallback.PermissionDenied(req_code);
+//                                                else
+//                                                    permissionResultCallback.PartialPermissionGranted(req_code,pending_permissions);
+//                                                break;
+//                                        }
+//                                    }
+//                                });
+//                    }
+//                    else {
+//                        Log.i(TAG, "all permissions granted");
+//                        Log.i(TAG, "proceed to next step");
+//                        permissionResultCallback.PermissionGranted(req_code);
+//
+//                    }
+//
+//                }
+//                break;
+//        }
+//    }
 
-                    for (int i = 0; i < listPermissionsNeeded.size(); i++) {
-                        if (perms.get(listPermissionsNeeded.get(i)) != PackageManager.PERMISSION_GRANTED) {
-                            if(ActivityCompat.shouldShowRequestPermissionRationale(current_activity,listPermissionsNeeded.get(i)))
-                                pending_permissions.add(listPermissionsNeeded.get(i));
-                            else {
-                                Log.i(TAG, "Go to settings and enable permissions");
-                                permissionResultCallback.NeverAskAgain(req_code);
-                                Toast.makeText(current_activity, "Go to settings and enable permissions", Toast.LENGTH_LONG).show();
-                                return;
-                            }
-                        }
-                    }
 
-                    if(pending_permissions.size()>0) {
-                        showMessageOKCancel(dialog_content,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        switch (which) {
-                                            case DialogInterface.BUTTON_POSITIVE:
-                                                check_permission(permission_list,dialog_content,req_code);
-                                                break;
-                                            case DialogInterface.BUTTON_NEGATIVE:
-                                                Log.i(TAG, "permission not fully given");
-                                                if(permission_list.size()==pending_permissions.size())
-                                                    permissionResultCallback.PermissionDenied(req_code);
-                                                else
-                                                    permissionResultCallback.PartialPermissionGranted(req_code,pending_permissions);
-                                                break;
-                                        }
-                                    }
-                                });
-                    }
-                    else {
-                        Log.i(TAG, "all permissions granted");
-                        Log.i(TAG, "proceed to next step");
-                        permissionResultCallback.PermissionGranted(req_code);
-
-                    }
-
-                }
-                break;
-        }
-    }
-
-
-    /**
-     * Explain why the app needs permissions
-     *
-     * @param message
-     * @param okListener
-     */
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(current_activity)
-                .setMessage(message)
-                .setPositiveButton("Ok", okListener)
-                .setNegativeButton("Cancel", okListener)
-                .create()
-                .show();
-    }
+//    /**
+//     * Explain why the app needs permissions
+//     *
+//     * @param message
+//     * @param okListener
+//     */
+//    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+//        new AlertDialog.Builder(current_activity)
+//                .setMessage(message)
+//                .setPositiveButton("Ok", okListener)
+//                .setNegativeButton("Cancel", okListener)
+//                .create()
+//                .show();
+//    }
 
 }

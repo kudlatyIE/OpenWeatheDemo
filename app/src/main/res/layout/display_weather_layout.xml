@@ -8,8 +8,8 @@
 
 <android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="ie.droidfactory.openweatherdemo.MainActivity">
+    android:layout_height="wrap_content"
+    tools:context="ie.droidfactory.openweatherdemo.screens.MainActivity">
 
     <android.support.constraint.Guideline
         android:id="@+id/vertical_middle"

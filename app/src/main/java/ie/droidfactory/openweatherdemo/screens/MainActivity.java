@@ -1,15 +1,11 @@
-package ie.droidfactory.openweatherdemo;
+package ie.droidfactory.openweatherdemo.screens;
 
 import android.Manifest;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.location.Location;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,14 +14,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import ie.droidfactory.openweatherdemo.api.NetworkUtils;
+import ie.droidfactory.openweatherdemo.R;
 import ie.droidfactory.openweatherdemo.model.IconResponse;
 import ie.droidfactory.openweatherdemo.model.WeatherCondition;
 import ie.droidfactory.openweatherdemo.utils.ConnectionUtils;
@@ -38,7 +33,7 @@ import ie.droidfactory.openweatherdemo.utils.PermissionUtils;
 import ie.droidfactory.openweatherdemo.viewmodel.WeatherIconViewModel;
 import ie.droidfactory.openweatherdemo.viewmodel.WeatherTodayViewModel;
 
-public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback, PermissionResultCallback{
+public class MainActivity extends AppCompatActivity implements  PermissionResultCallback{
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -58,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         setContentView(R.layout.activity_main);
         weatherLauout = findViewById(R.id.layout_main_weather);
         viewMain = findViewById(R.id.main_lauout);
+        weatherLauout.setVisibility(View.INVISIBLE);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getResources().getString(R.string.title_login));
@@ -65,13 +61,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         actionBar.setIcon(R.mipmap.ic_launcher_round);
 
         loadViews();
+        chechPermissionsDialog();
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        chechPermissions();
+//        chechPermissions();
 
     }
 
@@ -144,11 +141,18 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
 
+    private void chechPermissionsDialog(){
+        permissionUtils=new PermissionUtils(this);
+        permissions.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
+        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        permissionUtils.checkPermissionDialog(permissions,"dialog context", PERMISSIONS_REQUEST );
+    }
+
     private void chechPermissions(){
         permissionUtils=new PermissionUtils(this);
         permissions.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-        permissionUtils.check_permission(permissions,"dialog context", PERMISSIONS_REQUEST );
+        permissionUtils.checkPermission(permissions, PERMISSIONS_REQUEST );
     }
 
 
@@ -161,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             loadWeather(location.getLatitude(), location.getLongitude(), MyLocaleUtils.getLocaleUnits(getResources().getConfiguration().locale).getMetricSystem(), reloadData);
             reloadData=false;
         }else {
-            weatherLauout.setVisibility(View.GONE);
+            weatherLauout.setVisibility(View.INVISIBLE);
             showSnackbar("current location not available");
         }
 
@@ -169,13 +173,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     @Override
     public void PartialPermissionGranted(int request_code, ArrayList<String> granted_permissions) {
-        weatherLauout.setVisibility(View.GONE);
+        weatherLauout.setVisibility(View.INVISIBLE);
         showSnackbar("Location Access Permission Denied");
     }
 
     @Override
     public void PermissionDenied(int request_code) {
-        weatherLauout.setVisibility(View.GONE);
+        weatherLauout.setVisibility(View.INVISIBLE);
         showSnackbar("Location Access Permission Denied");
     }
 
@@ -229,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 break;
             case R.id.menu_item_refresh:
                 reloadData=true;
-                chechPermissions();
+                chechPermissionsDialog();
                 break;
         }
         return super.onOptionsItemSelected(item);

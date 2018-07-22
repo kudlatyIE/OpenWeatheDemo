@@ -15,8 +15,14 @@ import static ie.droidfactory.openweatherdemo.api.NetworkUtils.*;
 public interface ServiceWeatherToday {
 
     @GET(URL_TODAY)
-    Call<WeatherCondition> getWeatherToday(@Query(PARAM_LAT) String valueLatitude, @Query(PARAM_LON) String valueLongitude);
+    Call<WeatherCondition> getWeatherToday(
+            @Query(PARAM_LAT) String valueLatitude,
+            @Query(PARAM_LON) String valueLongitude);
     @GET(URL_TODAY)
-    Call<WeatherCondition> getWeatherToday(@Query(PARAM_APP_ID) String appId, @Query(PARAM_LAT) String valueLatitude, @Query(PARAM_LON) String valueLongitude, @Query(PARAM_UNITS) String metric);
+    Call<WeatherCondition> getWeatherToday(
+            @Query(PARAM_APP_ID) String appId,
+            @Query(PARAM_LAT) String valueLatitude,
+            @Query(PARAM_LON) String valueLongitude,
+            @Query(PARAM_UNITS) String metric);
 
 }

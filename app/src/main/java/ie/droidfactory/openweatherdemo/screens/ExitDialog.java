@@ -1,9 +1,11 @@
-package ie.droidfactory.openweatherdemo;
+package ie.droidfactory.openweatherdemo.screens;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.ContextThemeWrapper;
+
+import ie.droidfactory.openweatherdemo.R;
 
 /**
  * Created by kudlaty on 2018-03-10.
