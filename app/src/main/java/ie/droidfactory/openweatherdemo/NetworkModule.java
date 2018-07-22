@@ -37,6 +37,8 @@ public class NetworkModule {
         return new Cache(cacheFile, 10*1000*1000);
     }
 
+    @Provides
+    @OpenWeatherApplicationScope
     public File cacheFile(@ApplicationContext Context context){
         return new File(context.getCacheDir(), "okhttp_cache");
     }

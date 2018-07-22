@@ -1,23 +1,71 @@
 package ie.droidfactory.openweatherdemo.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by kudlaty on 2018-03-10.
+ * json object from jsonArray "list"
  */
 
 public class WeatherCondition {
 
+    @SerializedName("cord")
+    @Expose
     private Coord cord;
+
+    @SerializedName("weather")
+    @Expose
     private Weather[] weather;
+
+    @SerializedName("base")
+    @Expose
     private String base;
+
+    @SerializedName("main")
+    @Expose
     private MainCondition main;
+
+    @SerializedName("wind")
+    @Expose
     private Wind wind;
+
+    @SerializedName("rain")
+    @Expose
     private Rain rain;
+
+    @SerializedName("clouds")
+    @Expose
     private Clouds clouds;
+
+    /**
+     * UNIX UTC timestamp
+     */
+    @SerializedName("dt")
+    @Expose
     private long dt;// UNIX UTC timestamp
+
+    /**
+     *contain timestamp for sunrise and sunset (and country code (eg. IE, GB, US) and string message
+     */
+    @SerializedName("sys")
+    @Expose
     private Sun sys;
+
+    @SerializedName("id")
+    @Expose
     private int id;
+
+    @SerializedName("name")
+    @Expose
     private String name;
+
+    @SerializedName("cod")
+    @Expose
     private int cod;
+
+    @SerializedName("errorResponse")
+    @Expose
     private ErrorResponse errorResponse;
 
     public Coord getCord() {

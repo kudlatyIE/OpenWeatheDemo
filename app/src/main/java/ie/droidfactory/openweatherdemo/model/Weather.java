@@ -1,13 +1,29 @@
 package ie.droidfactory.openweatherdemo.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by kudlaty on 2018-03-10.
+ * single json object in JsonArray in JsonArray "list"
  */
 
 public class Weather {
+
+    @SerializedName("id")
+    @Expose
     private int id;
+
+    @SerializedName("main")
+    @Expose
     private String main;
+
+    @SerializedName("description")
+    @Expose
     private String description;
+
+    @SerializedName("icon")
+    @Expose
     private String icon;
 
     public int getWeatherId() {

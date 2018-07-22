@@ -5,6 +5,7 @@ package ie.droidfactory.openweatherdemo.model;
  */
 
 public class Rain {
+
     private double _3h;
 
     public double get_3hRainProbability() {

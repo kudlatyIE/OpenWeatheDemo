@@ -1,11 +1,20 @@
 package ie.droidfactory.openweatherdemo.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by kudlaty on 2018-03-11.
  */
 
 public class ErrorResponse {
+
+    @SerializedName("responseCode")
+    @Expose
     private int responseCode;
+
+    @SerializedName("errorMessage")
+    @Expose
     private String errorMessage;
 
 

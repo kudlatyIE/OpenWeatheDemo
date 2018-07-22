@@ -1,16 +1,41 @@
 package ie.droidfactory.openweatherdemo.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by kudlaty on 2018-03-10.
+ * json object "main"
  */
 
 public class MainCondition {
+
+    @SerializedName("temp")
+    @Expose
     private double temp;
+
+    @SerializedName("pressure")
+    @Expose
     private int  pressure;
+
+    @SerializedName("humidity")
+    @Expose
     private int humidity;
+
+    @SerializedName("temp_min")
+    @Expose
     private double temp_min;
+
+    @SerializedName("temp_max")
+    @Expose
     private double temp_max;
+
+    @SerializedName("sea_level")
+    @Expose
     private double sea_level;
+
+    @SerializedName("grnd_level")
+    @Expose
     private double grnd_level;
 
     public double getTemp() {
